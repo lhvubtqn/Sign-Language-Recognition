@@ -29,7 +29,8 @@ def main():
         'model_{}_serialized_path'.format(model_name))
     logger.info("Model deserialized from path '{}'".
                 format(model_serialized_path))
-
+                
+    classifier_model = joblib.load(model_serialized_path)
     testing_images_labels_path = get_config('testing_images_labels_path')
     with open(testing_images_labels_path, 'r') as file:
         lines = file.readlines()
@@ -41,7 +42,6 @@ def main():
             try:
                 frame = apply_image_transformation(frame)
                 frame_flattened = frame.flatten()
-                classifier_model = joblib.load(model_serialized_path)
                 predicted_labels = classifier_model.predict([frame_flattened])
                 predicted_label = predicted_labels[0]
                 logger.info('"{}" {} ---> {}'.format(image_path, image_label,
